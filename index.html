@@ -1,0 +1,44 @@
+<input id="hash">Hash</input></br>
+<input id="dif">难度</input></br>
+
+<button onclick="start()">开挖！</button>
+
+<div id="out">输出数据</div>
+<script src="https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js"></script>
+<script>
+
+    function ranS(length) {
+        return [...Array(length)]
+            .map(i => (~~(Math.random(length) * 36)).toString(36))
+            .join("");
+    }
+
+    function ranN(minNum, maxNum) {
+        return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+    }
+    const start = () => {
+
+        let n = {
+            previoushash: document.getElementById('hash').value,
+            difficulty: Number(document.getElementById('dif').value),
+            minekey: ""
+        }
+        while (true) {
+            n["minekey"] = ranS(ranN(1, 400))
+            let md5log = MD5(JSON.stringify(n))
+            let flag = true
+            for (i = md5log.length - 1; i > md5log.length - 1 - n.difficulty; i--) {
+                if (md5log[i] !== "0") { flag = false; break } else { continue }
+            }
+            if (flag) {
+
+                document.getElementById('out').innerText = `爆块了！！请输入\n>share ${n["minekey"]}\n 领取奖励！`
+                break;
+            } else {
+                console.log(`错误的Key\n${n["minekey"]}\n错误的Hash:\n${md5log}`)
+                continue;
+            }
+
+        }
+    }
+</script>
